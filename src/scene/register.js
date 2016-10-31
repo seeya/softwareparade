@@ -14,7 +14,7 @@ var RegisterScene = cc.Scene.extend({
         this.addChild(text);
 
         // Create the textfield
-        var textField = new ccui.TextField("Your Name", "Marker Felt", 30);
+        textField = new ccui.TextField("Your Name", "Marker Felt", 30);
         textField.x = size.width / 2.0;
         textField.y = size.height / 2.0;
 
@@ -44,6 +44,7 @@ var RegisterScene = cc.Scene.extend({
     touchEvent: function(sender, type){
         switch (type) {
             case ccui.Widget.TOUCH_ENDED:
+                ds.register(textField.string, sdkbox.PluginFacebook.getUserID());
                 sceneManager.transit("MenuScene");
                 break;
             default:

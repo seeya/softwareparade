@@ -6,9 +6,10 @@ var DataService = function() {
 
 DataService.prototype.login = function(facebookId, cb) {
 	var that = this;
+	console.log("Facebook id: " + facebookId);
 	this.post('login', {facebookId: facebookId}, function(response) {
 		if(response == "not found") {
-			alert("Not found!");
+			return cb(false);
 		}
 		else {
 			that.token = response.sessionToken;
@@ -21,15 +22,11 @@ DataService.prototype.login = function(facebookId, cb) {
 		}
 		return cb(false);
 	});
-
-
-
+	
 };
 
 DataService.prototype.register = function(name, facebookId) {
-	this.post('register', {facebookId: facebookId, name: name}).then(function(response) {
-
-	});
+	this.post('register', {facebookId: facebookId, name: name});
 };
 
 DataService.prototype.getHighscore = function(gameId) {
@@ -68,12 +65,12 @@ DataService.prototype.post = function(link, params, cb) {
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	                          
 	xhr.onreadystatechange = function () {
+		cc.director.getRunningScene().removeChild(loader);
+
 		if ( xhr.readyState == 4 && ( xhr.status >= 200 && xhr.status <= 207 ) ) {
 		    cc.log( JSON.parse(xhr.responseText));
 		    cb(JSON.parse(xhr.responseText));
 		}
-
-		cc.director.getRunningScene().removeChild(that.loader);
 	}
 
 	var str = "";

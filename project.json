@@ -9,17 +9,19 @@
     "renderMode" : 0,
     "engineDir":"frameworks/cocos2d-html5",
 
-    "modules" : ["cocos2d", "extensions"],
+    "modules" : ["cocos2d", "extensions", "sdkbox"],
 
 
     "jsList" : [
         "src/resource.js",
         "src/manager/DataService.js",
+        "src/manager/SocialManager.js",
         "src/manager/SceneManager.js",
         "src/manager/LoginManager.js",
         "src/welcome.js",
         "src/scene/menu.js",
         "src/scene/name.js",
+        "src/scene/register.js",
         "src/scene/profile.js",
         "src/scene/game.js",
         "src/scene/gameEnd.js"
