@@ -35,8 +35,18 @@ var WelcomeScene = cc.Scene.extend({
         this._super();
         if (WELCOME_INITIALIZED == false){
             window.ds = new DataService();
+            window.socialManager = new SocialManager();
             window.sceneManager = new SceneManager();
             window.loginManager = new LoginManager();
+
+            sdkbox.PluginFacebook.init();
+            sdkbox.PluginFacebook.setListener({
+                onLogin: loginManager.onLogin,
+                onAPI: socialManager.onFacebookAPI,
+                onSharedSuccess: socialManager.onFacebookShareSuccess,
+                onSharedFailed: socialManager.onFacebookShareFailed,
+                onSharedCancel: socialManager.onFacebookShareCancel
+            });
 
             WELCOME_INITIALIZED = true;
             var layer = new WelcomeLayer();
