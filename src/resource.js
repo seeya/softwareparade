@@ -21,7 +21,9 @@ var res = {
     stage_bg: "res/stage_bg.png",
     stage1_bg: "res/stage1.png",
     stage_start: "res/play-button.png",
-    stage_highscore: "res/statistics.png"
+    stage_highscore: "res/statistics.png",
+    loading_png: "res/loading.png",
+    load_bg: "res/loaderbackground.png"
 
 };
 
