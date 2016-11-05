@@ -8,38 +8,44 @@ Download this repo and paste everything inside.
 
 **Do NOT upload the frameworks and simulator folder.**
 
-## SDKBox Setup
-Download the SDKbox script, make sure you have python installed.
+## REMOVED Dependency of SDKBox
+SDKBox was not flexible enough and difficult to modify, hence I wrote my own Facebook oauth login and used the Graph API.
 
-`python -c "import urllib; s = urllib.urlopen('https://raw.githubusercontent.com/sdkbox-doc/en/master/install/install.py').read(); exec s"`
+- The main logic for the oauth process is simply using a `WebView` and parsing the token upon successful login.
+- Next the token is used to fetch the user's facebookId and name.
+- Finally the data is saved locally and can be used if required.
 
-Once done, install the facebook sdk
+`LoginManager.js` contains the token, facebookId and name of the current user.
 
-`sdkbox import facebook`
+`SocialManager.js` uses `loginManger` to share highscores.
 
-In the `project.json` file make sure the modules is like this:
 
-`"modules" : ["cocos2d", "extensions", "sdkbox"],`
+## Basic Flow
+The application starting point is `welcome.js`. Once loaded, it will initialize a few global variables.
 
-A file `res/sdkbox_config.json` should be created. Within it, enter the following:
+```javascript
+window.ds = new DataService();
+window.socialManager = new SocialManager();
+window.sceneManager = new SceneManager();
+window.loginManager = new LoginManager();
+```
 
-`{
-    "android": {
-        "Facebook": {
-            "debug": true,
-            "app_id":"1615893355370882"
-        }
-    }, 
-    "ios": {
-        "Facebook": {
-            "debug": true
-        }
-    }
-}`
+Since all these variables are global, you can just call them directly. Example:
 
-Finally within `frameworks/runtime-src/proj.android` if you use the command line to build update the `AndroidManifest.xml` to contain this:
+```javascript
+socialManager.shareFacebook("Hi from software parade");
+```
 
-`<provider android:authorities="com.facebook.app.FacebookContentProvider1043603122426009" android:exported="true" android:name="com.facebook.FacebookContentProvider" />`
+#  GET Request
+```javascript
+ds.get("apiendpoint", {key: value, key, value}, callback);
+```
+
+# POST Request
+```javascript
+ds.post("apiendpoint", {key: value, key, value}, callback);
+```
+The backend server url can get retrieved using `ds.endpoint` which returns `http://spapi.t05.sg/game/` 
 
 ## Explaination of folder structure 
 
