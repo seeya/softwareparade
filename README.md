@@ -9,6 +9,44 @@ Download this repo and paste everything inside.
 **Do NOT upload the frameworks and simulator folder.**
 
 ## REMOVED Dependency of SDKBox
+SDKBox was not flexible enough and difficult to modify, hence I wrote my own Facebook oauth login and used the Graph API.
+
+- The main logic for the oauth process is simply using a `WebView` and parsing the token upon successful login.
+- Next the token is used to fetch the user's facebookId and name.
+- Finally the data is saved locally and can be used if required.
+
+`LoginManager.js` contains the token, facebookId and name of the current user.
+
+`SocialManager.js` uses `loginManger` to share highscores.
+
+
+## Basic Flow
+The application starting point is `welcome.js`. Once loaded, it will initialize a few global variables.
+
+```javascript
+window.ds = new DataService();
+window.socialManager = new SocialManager();
+window.sceneManager = new SceneManager();
+window.loginManager = new LoginManager();
+```
+
+Since all these variables are global, you can just call them directly. Example:
+
+```javascript
+socialManager.shareFacebook("Hi from software parade");
+```
+
+#  GET Request
+```javascript
+ds.get("apiendpoint", {key: value, key, value}, callback);
+```
+
+# POST Request
+```javascript
+ds.post("apiendpoint", {key: value, key, value}, callback);
+```
+The backend server url can get retrieved using `ds.endpoint` which returns `http://spapi.t05.sg/game/` 
+
 ## Explaination of folder structure 
 
 `index.html` - Loads all the scripts
