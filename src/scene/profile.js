@@ -56,7 +56,7 @@ var ProfileLayer = cc.Layer.extend({
 		leaveButton.setTouchEnabled(true);
 		leaveButton.loadTextures(res.leave_png, "", "");
 		leaveButton.setContentSize(cc.size(45, 45));
-		leaveButton.setPosition(cc.p(size.width/2+180, size.height/2 +5));
+		leaveButton.setPosition(cc.p(size.width/2+275, size.height/2 +5));
 		leaveButton.addTouchEventListener(this.touchLeave, this);
 		this.addChild(leaveButton);
 //		leave classroom button
@@ -68,7 +68,7 @@ var ProfileLayer = cc.Layer.extend({
 		enterButton.setTouchEnabled(true);
 		enterButton.loadTextures(res.enter_png, "", "");
 		enterButton.setContentSize(cc.size(45, 45));
-		enterButton.setPosition(cc.p(size.width/2+265, size.height/2 -48));
+		enterButton.setPosition(cc.p(size.width/2+265, size.height/2 -78));
 		enterButton.addTouchEventListener(this.touchEnter, this);
 		this.addChild(enterButton);
 //		enter classroom button
@@ -79,7 +79,7 @@ var ProfileLayer = cc.Layer.extend({
 		saveNameButton.setTouchEnabled(true);
 		saveNameButton.loadTextures(res.savename_png, "", "");
 		saveNameButton.setContentSize(cc.size(40, 40));
-		saveNameButton.setPosition(cc.p(size.width/2+270, size.height/2 +55));
+		saveNameButton.setPosition(cc.p(size.width/2+270, size.height/2 +85));
 		saveNameButton.addTouchEventListener(this.touchSaveName, this);
 		this.addChild(saveNameButton);
 //		save name button
@@ -90,7 +90,7 @@ var ProfileLayer = cc.Layer.extend({
 //		Name label
 		this.labelName = new cc.LabelTTF("Name:", "AmericanTypewriter", 30);
 		this.labelName.setColor(cc.color(255,255,255));//white
-		this.labelName.setPosition(cc.p(size.width / 2 -100, size.height / 2 + 50 ));
+		this.labelName.setPosition(cc.p(size.width / 2 -100, size.height / 2 + 80 ));
 		this.addChild(this.labelName);
 //		Name label
 
@@ -111,13 +111,11 @@ var ProfileLayer = cc.Layer.extend({
 //		Class Code label
 		this.labelClassCode = new cc.LabelTTF("Enter Class Code:", "AmericanTypewriter", 30);
 		this.labelClassCode.setColor(cc.color(255,255,255));//white
-		this.labelClassCode.setPosition(cc.p(size.width / 2 -180, size.height / 2 - 50 ));
+		this.labelClassCode.setPosition(cc.p(size.width / 2 -180, size.height / 2 - 80 ));
 		this.addChild(this.labelClassCode);
 //		Class Code label
 
 
-
-//		if (changes == 1){
 //		change status label
 		this.labelStatus = new cc.LabelTTF(null, "Helvetica", 20);
 		this.labelStatus.setColor(cc.color(255,255,255));//white
@@ -134,7 +132,7 @@ var ProfileLayer = cc.Layer.extend({
 		textFieldName = new ccui.TextField();
 		textFieldName.setTouchEnabled(true);
 		textFieldName.x = size.width / 2.0 + 100;
-		textFieldName.y = size.height / 2.0 + 50 ;
+		textFieldName.y = size.height / 2.0 + 80 ;
 		textFieldName.setMaxLength(20);
 		textFieldName.fontSize = 30;
 		textFieldName.fontName = "Marker Felt";
@@ -147,7 +145,7 @@ var ProfileLayer = cc.Layer.extend({
 		textFieldClassroom = new ccui.TextField("classroomCode", "Marker Felt", 30);
 		textFieldClassroom.setTouchEnabled(true);
 		textFieldClassroom.x = size.width / 2.0 + 100 ;
-		textFieldClassroom.y = size.height / 2.0 - 50;
+		textFieldClassroom.y = size.height / 2.0 - 80;
 		textFieldClassroom.setMaxLength(20);
 		textFieldClassroom.fontSize = 30;
 		textFieldClassroom.fontName = "Marker Felt";
