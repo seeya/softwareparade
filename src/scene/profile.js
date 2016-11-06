@@ -3,6 +3,7 @@ var PROFILE_INITIALIZED = false;
 var ProfileLayer = cc.Layer.extend({
 	sprite:null,
 	labelName:null,
+	labelShowClassName:null,
 	textFieldName:null,
 	textFieldClassroom:null,
 	pname:null,
@@ -15,22 +16,27 @@ var ProfileLayer = cc.Layer.extend({
 		// 1. super init first
 		this._super();
 		var size = cc.winSize;
-		var changes = 2;// initialize at 2, 1 for labelSuccess, 0 for labelFailure	
 		var that=this;
 
 		profileManager.getProfile(function(response) { 
-			
-					pname= response.name;	
-					pclassroomName=response.classroomName;
-					pclassroomCode=response.classroomCode;
-					
-					textFieldName.setString(pname);
-					textFieldClassroom.setString(pclassroomName);
+
+			pname= response.name;	
+			pclassroomName=response.classroomName;
+			pclassroomCode=response.classroomCode;
+
+			textFieldName.setString(pname);
+			labelShowClassName.setString(pclassroomName);
+			textFieldClassroom.setString(pclassroomCode);
+			if(response.classroomName=="null" && response.classroomCode == "null"){
+				labelShowClassName.setString("");
+				textFieldClassroom.setString("");
+			}
+
 			cc.log("getProfile callback: pname:"+pname);
 			cc.log("getProfile callback: pclassroomName:"+pclassroomName);
 			cc.log("getProfile callback: pclassroomCode:"+pclassroomCode);
 		});//getProfile callback
-		
+
 /////////////////////////////////////////BUTTONS_START/////////////////////////////////////////
 //		back button
 		var backButton = new ccui.Button();
@@ -50,19 +56,19 @@ var ProfileLayer = cc.Layer.extend({
 		leaveButton.setTouchEnabled(true);
 		leaveButton.loadTextures(res.leave_png, "", "");
 		leaveButton.setContentSize(cc.size(45, 45));
-		leaveButton.setPosition(cc.p(size.width/2+300, size.height/2 +5));
+		leaveButton.setPosition(cc.p(size.width/2+180, size.height/2 +5));
 		leaveButton.addTouchEventListener(this.touchLeave, this);
 		this.addChild(leaveButton);
 //		leave classroom button
-		
-		
+
+
 //		enter classroom button
 		var enterButton = new ccui.Button();
 		enterButton.setScale9Enabled(true);
 		enterButton.setTouchEnabled(true);
 		enterButton.loadTextures(res.enter_png, "", "");
 		enterButton.setContentSize(cc.size(45, 45));
-		enterButton.setPosition(cc.p(size.width/2+240, size.height/2 +5));
+		enterButton.setPosition(cc.p(size.width/2+265, size.height/2 -48));
 		enterButton.addTouchEventListener(this.touchEnter, this);
 		this.addChild(enterButton);
 //		enter classroom button
@@ -72,8 +78,8 @@ var ProfileLayer = cc.Layer.extend({
 		saveNameButton.setScale9Enabled(true);
 		saveNameButton.setTouchEnabled(true);
 		saveNameButton.loadTextures(res.savename_png, "", "");
-		saveNameButton.setContentSize(cc.size(45, 45));
-		saveNameButton.setPosition(cc.p(size.width/2+250, size.height/2 +50));
+		saveNameButton.setContentSize(cc.size(40, 40));
+		saveNameButton.setPosition(cc.p(size.width/2+270, size.height/2 +55));
 		saveNameButton.addTouchEventListener(this.touchSaveName, this);
 		this.addChild(saveNameButton);
 //		save name button
@@ -82,26 +88,40 @@ var ProfileLayer = cc.Layer.extend({
 
 /////////////////////////////////////////LABELS_START/////////////////////////////////////////
 //		Name label
-		this.labelName = new cc.LabelTTF("NAME:", "AmericanTypewriter", 30);
+		this.labelName = new cc.LabelTTF("Name:", "AmericanTypewriter", 30);
 		this.labelName.setColor(cc.color(255,255,255));//white
 		this.labelName.setPosition(cc.p(size.width / 2 -100, size.height / 2 + 50 ));
 		this.addChild(this.labelName);
 //		Name label
 
-//		Class label
-		this.labelClass = new cc.LabelTTF("CLASS:", "AmericanTypewriter", 30);
-		this.labelClass.setColor(cc.color(255,255,255));//white
-		this.labelClass.setPosition(cc.p(size.width / 2 -105, size.height / 2 ));
-		this.addChild(this.labelClass);
-//		Class label
+//		Class Name label
+		this.labelClassName = new cc.LabelTTF("Class:", "AmericanTypewriter", 30);
+		this.labelClassName.setColor(cc.color(255,255,255));//white
+		this.labelClassName.setPosition(cc.p(size.width / 2 -100, size.height / 2 ));
+		this.addChild(this.labelClassName);
+//		Class Name label
+
+//		Show Class Name label
+		labelShowClassName = new cc.LabelTTF("", "AmericanTypewriter", 30);
+		labelShowClassName.setColor(cc.color(255,255,255));//white
+		labelShowClassName.setPosition(cc.p(size.width / 2 + 100 , size.height / 2  ));
+		this.addChild(labelShowClassName);
+//		Show Class Name label
+
+//		Class Code label
+		this.labelClassCode = new cc.LabelTTF("Enter Class Code:", "AmericanTypewriter", 30);
+		this.labelClassCode.setColor(cc.color(255,255,255));//white
+		this.labelClassCode.setPosition(cc.p(size.width / 2 -180, size.height / 2 - 50 ));
+		this.addChild(this.labelClassCode);
+//		Class Code label
 
 
 
 //		if (changes == 1){
 //		change status label
-		this.labelStatus = new cc.LabelTTF(null, "Helvetica", 25);
+		this.labelStatus = new cc.LabelTTF(null, "Helvetica", 20);
 		this.labelStatus.setColor(cc.color(255,255,255));//white
-		this.labelStatus.setPosition(cc.p(size.width / 2 , size.height / 2 - 40 ));
+		this.labelStatus.setPosition(cc.p(size.width / 2 , size.height / 2 - 90 ));
 		this.addChild(this.labelStatus);
 //		change status label
 //		}
@@ -111,7 +131,6 @@ var ProfileLayer = cc.Layer.extend({
 /////////////////////////////////////////TEXTFIELDS_START/////////////////////////////////////////
 //		Create the textfields
 		//name field
-
 		textFieldName = new ccui.TextField();
 		textFieldName.setTouchEnabled(true);
 		textFieldName.x = size.width / 2.0 + 100;
@@ -128,11 +147,11 @@ var ProfileLayer = cc.Layer.extend({
 		textFieldClassroom = new ccui.TextField("classroomCode", "Marker Felt", 30);
 		textFieldClassroom.setTouchEnabled(true);
 		textFieldClassroom.x = size.width / 2.0 + 100 ;
-		textFieldClassroom.y = size.height / 2.0;
+		textFieldClassroom.y = size.height / 2.0 - 50;
 		textFieldClassroom.setMaxLength(20);
 		textFieldClassroom.fontSize = 30;
 		textFieldClassroom.fontName = "Marker Felt";
-		textFieldClassroom.setPlaceHolder("CLASSROOM");
+		textFieldClassroom.setPlaceHolder("Classroom Code");
 		textFieldClassroom.addEventListener(this.textFieldClassEvent, this);
 		this.addChild(textFieldClassroom);
 		//class field	
@@ -158,14 +177,14 @@ var ProfileLayer = cc.Layer.extend({
 		switch (type) {
 		case ccui.Widget.TOUCH_ENDED:	
 			var that = this;
-			
-		//if name textfield is blank
+
+			//if name textfield is blank
 			if(textFieldName.string==""){//empty inputs
 				this.labelStatus.setString("Textfield is empty. Please enter name.");
 				cc.log("touchSaveName: nothing entered in textFieldName");
 				break;
 			}
-		//if name in txtfield same as current name
+			//if name in txtfield same as current name
 			else if(textFieldName.string==pname){
 				this.labelStatus.setString("Your name is already '"+textFieldName.string+"'.");
 				break;
@@ -209,18 +228,19 @@ var ProfileLayer = cc.Layer.extend({
 			else{
 ///////////////////////////////////callbacks//////////////////////////////////////////			
 				profileManager.assignPlayerToClassroom(textFieldClassroom.string, function(response) {
-				if(response==false) {// player not enrolled in class/invalid code
-					that.labelStatus.setString("Invalid classroom code. Please try again.");
-				}
-				else{ // success
-					that.labelStatus.setString("Success! Joined classroom "+ response.classroomName +" with: "+response.classroomCode);
-					textFieldClassroom.setString(response.classroomName);
-					pclassroomCode=response.classroomCode;
-					pclassroomName=response.classroomName;
-					cc.log("profile: new pclassroomCode: "+pclassroomCode);
-					cc.log("profile: new pclassroomName: "+pclassroomName);
-				}
-			});//assignPlayerToClassroom
+					if(response==false) {// player not enrolled in class/invalid code
+						that.labelStatus.setString("Invalid classroom code. Please try again.");
+					}
+					else{ // success
+						that.labelStatus.setString("Success! Joined classroom "+ response.classroomName +" with: "+response.classroomCode);
+						//textFieldClassroom.setString(response.classroomName);
+						labelShowClassName.setString(response.classroomName);
+						pclassroomCode=response.classroomCode;
+						pclassroomName=response.classroomName;
+						cc.log("profile: new pclassroomCode: "+pclassroomCode);
+						cc.log("profile: new pclassroomName: "+pclassroomName);
+					}
+				});//assignPlayerToClassroom
 			}
 ///////////////////////////////////callbacks//////////////////////////////////////////					
 			break;
@@ -228,13 +248,13 @@ var ProfileLayer = cc.Layer.extend({
 			break;
 		}//case
 	},
-	
-	
+
+
 	touchLeave: function(sender, type){ //leave classroom
 		switch (type) {
 		case ccui.Widget.TOUCH_ENDED:	
 			var that = this;
-			
+
 			cc.log("string:"+textFieldClassroom.string+":");
 			//if class textfield is blank
 			if(textFieldClassroom.string=="null"){
@@ -258,13 +278,14 @@ var ProfileLayer = cc.Layer.extend({
 						textFieldClassroom.setString("");
 						pclassroomCode=="null";
 						pclassroomName=="null";
+						labelShowClassName.setString("");
 					}
 					else // player not enrolled in class/invalid code
 						that.labelStatus.setString("Invalid classroom code. Please try again.");
-				cc.log("touchLeave: player not enrolled in class or class code invalid");
+					cc.log("touchLeave: player not enrolled in class or class code invalid");
 
 				});
-//			}//checkLeaveClassroom
+//				}//checkLeaveClassroom
 			}
 			break;
 		default:
@@ -276,13 +297,13 @@ var ProfileLayer = cc.Layer.extend({
 	textFieldNameEvent: function (textField, type) {
 		switch (type) {
 		case ccui.TextField.EVENT_INSERT_TEXT:
-		//	cc.log("Insert Character");
-		//	cc.log(textFieldName.string);
+			//	cc.log("Insert Character");
+			//	cc.log(textFieldName.string);
 			break;
 
 		case ccui.TextField.EVENT_DELETE_BACKWARD:
-		//	cc.log("Delete Character");
-		//	cc.log(textFieldName.string);
+			//	cc.log("Delete Character");
+			//	cc.log(textFieldName.string);
 			break;
 
 		default:  
