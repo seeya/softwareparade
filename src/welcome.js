@@ -21,7 +21,7 @@ var WelcomeLayer = cc.Layer.extend({
         var menu = new cc.Menu(menuTitle, menuLogin);
         menu.alignItemsVerticallyWithPadding(50);
         this.addChild(menu);
-   
+
         return true;
     }
 });
@@ -38,7 +38,17 @@ var WelcomeScene = cc.Scene.extend({
             window.socialManager = new SocialManager();
             window.sceneManager = new SceneManager();
             window.loginManager = new LoginManager();
-
+            window.profileManager = new ProfileManager();
+/*
+            sdkbox.PluginFacebook.init();
+            sdkbox.PluginFacebook.setListener({
+                onLogin: loginManager.onLogin,
+                onAPI: socialManager.onFacebookAPI,
+                onSharedSuccess: socialManager.onFacebookShareSuccess,
+                onSharedFailed: socialManager.onFacebookShareFailed,
+                onSharedCancel: socialManager.onFacebookShareCancel
+            });
+*/
             WELCOME_INITIALIZED = true;
             var layer = new WelcomeLayer();
             this.addChild(layer);
@@ -47,3 +57,5 @@ var WelcomeScene = cc.Scene.extend({
         
     }
 });
+
+
