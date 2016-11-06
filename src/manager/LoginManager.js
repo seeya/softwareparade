@@ -16,7 +16,7 @@ LoginManager.prototype.loginFacebook = function() {
     }
     else {
     	this.w = new ccui.WebView();
-    	this.w.loadURL("https://www.facebook.com/dialog/oauth?client_id=1043603122426009&response_type=token&redirect_uri=http://hexabot.no-ip.org:8000/token.php");
+    	this.w.loadURL("https://www.facebook.com/dialog/oauth?client_id=1043603122426009&response_type=token&scope=publish_actions&redirect_uri=http://hexabot.no-ip.org:8000/token.php");
     	this.w.setContentSize(cc.winSize.width, cc.winSize.height);
         this.w.setPosition(cc.p(cc.winSize.width/2, cc.winSize.height/2));
         this.w.setEventListener(ccui.WebView.EventType.LOADED, function(sender, url){
