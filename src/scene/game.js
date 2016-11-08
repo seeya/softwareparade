@@ -1,3 +1,5 @@
+var GAME_INITIALIZED = false;
+
 var GameUiLayer = cc.Layer.extend({
     ctor:function () {
         //////////////////////////////
@@ -13,7 +15,7 @@ var GameUiLayer = cc.Layer.extend({
         pauseButton.setContentSize(cc.size(75, 75));
         pauseButton.setPosition(cc.p(size.width - 60, size.height - 50));
         pauseButton.addTouchEventListener(this.touchPause, this);
-        
+
         this.addChild(pauseButton);
     },
 
@@ -88,6 +90,12 @@ var Game1Layer = cc.Layer.extend({
         //rendering of sprites and ui for the game
 
         this.attempt = [];
+
+        var bg = new cc.Sprite.create(res.bg);
+        bg.setAnchorPoint(cc.p(0.5, 0.5));
+        bg.x = cc.winSize.width/2;
+        bg.y = cc.winSize.height/2;
+        this.addChild(bg);  
 
         var timeBoard = new cc.LabelTTF("32", "Arial");
         timeBoard.setFontSize(60);
@@ -203,6 +211,8 @@ var Game1Layer = cc.Layer.extend({
     },
 
     popupHole: function(){
+        cc.audioEngine.playMusic(res.popup, false);    
+
         this.unschedule(this.popupHole);
         var done = false;
         var optionDisplayed  = -1;
@@ -230,13 +240,20 @@ var Game1Layer = cc.Layer.extend({
         
         this.holes[holeDisplayed].setTexture(res.game1Sprite_open);
         var optionText = new cc.LabelTTF(question.options[optionDisplayed].optionText, "AmericanTypewriter");
-        if (holeDisplayed == 1 || holeDisplayed == 3){
-            optionText.setFontSize(40);
+        if (holeDisplayed == 1 || holeDisplayed == 3) {
+            if(question.options[optionDisplayed].optionText.length > 20)
+                optionText.setFontSize(25);
+            else
+                optionText.setFontSize(40);
+
             optionText.x = hole.x;
             optionText.y =  hole.y + 70;
         }
         else{
-            optionText.setFontSize(30);
+            if(question.options[optionDisplayed].optionText.length > 20)
+                optionText.setFontSize(20);
+            else
+                optionText.setFontSize(30);            
             optionText.x = hole.x;
             optionText.y =  hole.y + 60;
         }
@@ -298,9 +315,11 @@ var Game1Layer = cc.Layer.extend({
             //add points
             this.points += 10;
             this.pointsBoard.setString(this.points);
+            cc.audioEngine.playMusic(res.success, false);    
         }
-        else{
+        else{            
             this.displayIncorrect();
+            cc.audioEngine.playMusic(res.fail, false);    
         }
         this.attempt.push(optionSelected.optionId);
         this.closeAllHoles();
@@ -396,14 +415,20 @@ var Game1Layer = cc.Layer.extend({
 var GameScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
-        //check gameId and load relevant layers based on it
-        var gameLayer = null;
-        gameLayer = gameManager.getGameLayer();
-        if (gameLayer != null){
-            this.addChild(gameLayer);
+
+        if(!GAME_INITIALIZED) {
+             //check gameId and load relevant layers based on it
+            var gameLayer = null;
+            gameLayer = gameManager.getGameLayer();
+            if (gameLayer != null){
+                this.addChild(gameLayer);
+            }
+            //load ui for the game
+            var gameUiLayer = new GameUiLayer();
+            this.addChild(gameUiLayer);     
+            
+            GAME_INITIALIZED = true;      
         }
-        //load ui for the game
-        var gameUiLayer = new GameUiLayer();
-        this.addChild(gameUiLayer);
+
     }
 });

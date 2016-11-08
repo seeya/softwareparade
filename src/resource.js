@@ -32,8 +32,12 @@ var res = {
     facebook_share_png: "res/facebookShare.png",
     leave_png:"res/leave.png",
     enter_png:"res/enterClass.png",
-    savename_png:"res/saveName.png"
-
+    savename_png:"res/saveName.png",
+    bg:"res/bg.png",
+    popup:"res/audio/popup.mp3",
+    success:"res/audio/success.mp3",
+    fail:"res/audio/fail.mp3",
+    comingsoon: "res/comingsoon.png"
 };
 
 var g_resources = [];

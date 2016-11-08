@@ -11,6 +11,12 @@ var MenuLayer = cc.Layer.extend({
 
         var size = cc.winSize;
 
+        var bg = new cc.Sprite.create(res.bg);
+        bg.setAnchorPoint(cc.p(0.5, 0.5));
+        bg.x = size.width/2;
+        bg.y = size.height/2;
+        this.addChild(bg);
+
         iconArray = [];
         startArray = [];
         scoreArray = [];
@@ -46,7 +52,7 @@ var MenuLayer = cc.Layer.extend({
         scrollView.setBounceEnabled(true);
         scrollView.setTouchEnabled(true);
         scrollView.setContentSize(cc.size(size.width, size.height - 100));
-        scrollView.setInnerContainerSize(cc.size(2000, size.height - 100));
+        scrollView.setInnerContainerSize(cc.size(3000, size.height - 100));
         scrollView.setAnchorPoint(cc.p(0.5, 0.5));
         scrollView.setPosition(cc.p(size.width/2, size.height/2 - 50));
 
@@ -63,7 +69,7 @@ var MenuLayer = cc.Layer.extend({
 
         gameManager.getGames(function(response){
             var games = response;
-            for(var i = 0; i < games.length; i++){
+            for(var i = 0; i <1; i++){
                 var game = games[i];
 
                 var stageView = new ccui.ImageView();
@@ -76,11 +82,19 @@ var MenuLayer = cc.Layer.extend({
                 var stageIcon = new ccui.Button();
                 stageIcon.setScale9Enabled(true);
                 stageIcon.setTouchEnabled(true);
-                stageIcon.loadTextures(res.stage1_bg, "", "");
+
+               
+                if(i == 0) {
+                    stageIcon.loadTextures(res.stage1_bg, "", "");
+                    stageIcon.addTouchEventListener(that.touchStageIcon, that);                    
+                }
+                else
+                    stageIcon.loadTextures(res.comingsoon, "", "");
+
+
                 stageIcon.setContentSize(cc.size(400, 400));
                 stageIcon.x = section[i] / 2;
                 stageIcon.y = innerContainer.height/2 + 50;
-                stageIcon.addTouchEventListener(that.touchStageIcon, that);
 
                 iconArray.push(stageIcon);
 
@@ -115,7 +129,28 @@ var MenuLayer = cc.Layer.extend({
                 scrollView.addChild(stageScore);
                 scrollView.addChild(stageText);
             }
-            
+
+            var stageView = new ccui.ImageView();
+            stageView.setScale9Enabled(true);
+            stageView.loadTexture(res.stage_bg);
+            stageView.setContentSize(cc.size(400, 400));
+            stageView.x = section[2] / 2;
+            stageView.y = innerContainer.height/2 + 50;
+
+            var stageIcon = new ccui.Button();
+            stageIcon.setScale9Enabled(true);
+            stageIcon.setTouchEnabled(true);            
+            stageIcon.loadTextures(res.comingsoon, "", "");
+            stageIcon.setContentSize(cc.size(400, 400));
+            stageIcon.x = section[2] / 2;
+            stageIcon.y = innerContainer.height/2 + 50;            
+        
+            var stageText = new ccui.Text(response[1].name, "AmericanTypewriter", 40);
+            stageText.setPosition(cc.p(section[2] / 2, innerContainer.height/2 - 200));     
+            scrollView.addChild(stageView);
+            scrollView.addChild(stageIcon);  
+            scrollView.addChild(stageText);
+                                 
         });
 
     },
@@ -123,8 +158,7 @@ var MenuLayer = cc.Layer.extend({
     touchProfile: function(sender, type){
         switch (type) {
             case ccui.Widget.TOUCH_ENDED:
-                var scene = new ProfileScene();
-                cc.director.pushScene(scene);
+                sceneManager.transit("ProfileScene");
                 break;
             default:
                 break;
@@ -179,6 +213,7 @@ var MenuLayer = cc.Layer.extend({
                         break;
                     }
                 }
+                cc.log(gameManager.getCurrentGame().gameId);
                 if (gameManager.getCurrentGame() != null){
                     sceneManager.transit("InfoScene");
                 }

@@ -1,5 +1,9 @@
-var RegisterScene = cc.Layer.extend({
-    ctor:function (data) {
+var TEXT_INPUT_FONT_NAME = "Thonburi";
+var TEXT_INPUT_FONT_SIZE = 36;
+
+var NameLayer = cc.Layer.extend({
+    sprite:null,
+    ctor:function () {
         //////////////////////////////
         // 1. super init first
         this._super();
@@ -17,14 +21,11 @@ var RegisterScene = cc.Layer.extend({
         this.addChild(text);
 
         // Create the textfield
-        textField = new ccui.TextField("Name", "Marker Felt", 30);
+        var textField = new ccui.TextField("Your Name", "Marker Felt", 30);
         textField.x = size.width / 2.0;
         textField.y = size.height / 2.0;
-        textField.setString(loginManager.name);
-
         textField.setMaxLength(20);
-
-        textField.setMaxLength(20);
+        textField.addEventListener(this.textFieldEvent, this);
         this.addChild(textField);
 
         var button = new ccui.Button();
@@ -38,26 +39,38 @@ var RegisterScene = cc.Layer.extend({
         button.setContentSize(cc.size(150, 48));
         button.addTouchEventListener(this.touchEvent, this);
         this.addChild(button);
+
+        return true;
     },
 
     //on submission of name
     touchEvent: function(sender, type){
         switch (type) {
             case ccui.Widget.TOUCH_ENDED:
-                // Register account with given name and transit to menu
-                ds.register(textField.string, loginManager.facebookId);
-                sceneManager.transit("MenuScene");
+                var scene = new MenuScene();
+                cc.director.replaceScene(scene);
                 break;
+            default:
+                break;
+        }
+    },
+
+    textFieldEvent: function (textField, type) {
+        switch (type) {
             default:
                 break;
         }
     }
 });
 
-var RegisterScene = cc.Scene.extend({
+
+var NameScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
-        var layer = new RegisterLayer();
+
+        var layer = new NameLayer();
         this.addChild(layer);
+        
     }
 });
+

@@ -11,6 +11,11 @@ var ProfileLayer = cc.Layer.extend({
         var size = cc.winSize;
         var that=this;
 
+        var bg = new cc.Sprite.create(res.bg);
+        bg.setAnchorPoint(cc.p(0.5, 0.5));
+        bg.x = size.width/2;
+        bg.y = size.height/2;
+        this.addChild(bg);
         /////////////////////////////////////////BUTTONS_START/////////////////////////////////////////
 //      back button
         addBackButton(this);
@@ -154,18 +159,18 @@ var ProfileLayer = cc.Layer.extend({
             var that = this;
 
             //if name textfield is blank
-            if(textFieldName.string==""){//empty inputs
+            if(that.textFieldName.string==""){//empty inputs
                 this.labelStatus.setString("Textfield is empty. Please enter name.");
                 cc.log("touchSaveName: nothing entered in textFieldName");
                 break;
             }
             //if name in txtfield same as current name
-            else if(textFieldName.string==profileManager.getProfileName()){
-                this.labelStatus.setString("Your name is already '"+textFieldName.string+"'.");
+            else if(that.textFieldName.string==profileManager.getProfileName()){
+                this.labelStatus.setString("Your name is already '"+this.textFieldName.string+"'.");
                 break;
             }
             else{       
-                profileManager.editPlayerName(textFieldName.string, function(response) {
+                profileManager.editPlayerName(that.textFieldName.string, function(response) {
                     if(!response) { //name change failure
                         that.labelStatus.setString("Error saving name.");
                     }
@@ -186,11 +191,11 @@ var ProfileLayer = cc.Layer.extend({
             var that = this;
 
             //if class textfield is blank
-            if(textFieldClassroom.string=="null"){
+            if(this.textFieldClassroom.string=="null"){
                 this.labelStatus.setString("You are not in a class. Enter a classroom code from your teacher.");
                 break;
             }
-            else if(textFieldClassroom.string==""){//empty inputs
+            else if(this.textFieldClassroom.string==""){//empty inputs
                 this.labelStatus.setString("Please enter a classroom code from your teacher.");
                 cc.log("touchLeave: nothing entered in textFieldClassroom");
                 break;
@@ -201,7 +206,7 @@ var ProfileLayer = cc.Layer.extend({
             }
             else{
 ///////////////////////////////////callbacks//////////////////////////////////////////          
-                profileManager.assignPlayerToClassroom(textFieldClassroom.string, function(response) {
+                profileManager.assignPlayerToClassroom(this.textFieldClassroom.string, function(response) {
                     if(response==false) {// player not enrolled in class/invalid code
                         that.labelStatus.setString("Invalid classroom code. Please try again.");
                     }
@@ -225,7 +230,7 @@ var ProfileLayer = cc.Layer.extend({
         case ccui.Widget.TOUCH_ENDED:   
             var that = this;
 
-            cc.log("string:"+textFieldClassroom.string+":");
+            cc.log("string:"+ this.textFieldClassroom.string+":");
             //if class textfield is blank
             if(textFieldClassroom.string=="null"){
                 this.labelStatus.setString("You are not in a class. Nothing to leave.");

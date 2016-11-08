@@ -76,6 +76,7 @@ var InfoLayer = cc.Layer.extend({
     touchBeginGame: function(sender, type){
         switch (type) {
             case ccui.Widget.TOUCH_ENDED:
+                GAME_INITIALIZED = false;
                 sceneManager.replace("GameScene");
                 break;
             default:

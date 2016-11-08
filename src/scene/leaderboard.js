@@ -13,10 +13,11 @@ var LeaderboardLayer = cc.Layer.extend({
             var size = cc.winSize;
 
             //create popup
-            var bg = cc.Sprite.create(res.load_bg);
+            var bg = new cc.Sprite.create(res.bg);
             bg.setAnchorPoint(cc.p(0.5, 0.5));
-            bg.setPosition(cc.p(size.width/2, size.height/2));
-            bg.setScale(size.width*2, size.height *2);
+            bg.x = size.width/2;
+            bg.y = size.height/2;
+            that.addChild(bg);
 
             cc.eventManager.addListener(cc.EventListener.create({
                 event: cc.EventListener.TOUCH_ONE_BY_ONE,
@@ -24,7 +25,6 @@ var LeaderboardLayer = cc.Layer.extend({
                 onTouchBegan: function (touch, event) { return true;}
             }), bg);
             
-            that.addChild(bg, 100);
 
             var backButton = new ccui.Button();
             backButton.setScale9Enabled(true);

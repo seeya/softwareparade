@@ -14,6 +14,11 @@ var WelcomeLayer = cc.Layer.extend({
 
         var menu = new cc.Menu(menuTitle, menuLogin);
         menu.alignItemsVerticallyWithPadding(50);
+        var bg = new cc.Sprite.create(res.bg);
+        bg.setAnchorPoint(cc.p(0.5, 0.5));
+        bg.x = size.width/2;
+        bg.y = size.height/2;
+        this.addChild(bg);
         this.addChild(menu);
     },
 
@@ -34,6 +39,8 @@ var WelcomeScene = cc.Scene.extend({
             window.questionManager = new QuestionManager();
             window.scoreManager = new ScoreManager();
             window.profileManager = new ProfileManager();
+
+            cc.director.setDisplayStats(false);
 
             WELCOME_INITIALIZED = true;
             var layer = new WelcomeLayer();

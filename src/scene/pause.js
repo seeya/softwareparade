@@ -6,6 +6,12 @@ var PauseLayer = cc.Layer.extend({
         this._super();
         var size = cc.winSize;
 
+        var bg = new cc.Sprite.create(res.bg);
+        bg.setAnchorPoint(cc.p(0.5, 0.5));
+        bg.x = size.width/2;
+        bg.y = size.height/2;
+        this.addChild(bg);
+        
         //load Resume Game Text
         var resumeText = new ccui.Text("Resume Game","AmericanTypewriter",45);
         resumeText.ignoreContentAdaptWithSize(false);
