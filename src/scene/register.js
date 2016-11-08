@@ -1,7 +1,4 @@
-var TEXT_INPUT_FONT_NAME = "Thonburi";
-var TEXT_INPUT_FONT_SIZE = 36;
-
-var RegisterScene = cc.Scene.extend({
+var RegisterScene = cc.Layer.extend({
     ctor:function (data) {
         //////////////////////////////
         // 1. super init first
@@ -20,7 +17,6 @@ var RegisterScene = cc.Scene.extend({
         textField.setString(loginManager.name);
 
         textField.setMaxLength(20);
-        textField.addEventListener(this.textFieldEvent, this);
 
         textField.setMaxLength(20);
         this.addChild(textField);
@@ -36,8 +32,6 @@ var RegisterScene = cc.Scene.extend({
         button.setContentSize(cc.size(150, 48));
         button.addTouchEventListener(this.touchEvent, this);
         this.addChild(button);
-
-        return true;
     },
 
     //on submission of name
@@ -51,12 +45,13 @@ var RegisterScene = cc.Scene.extend({
             default:
                 break;
         }
-    },
+    }
+});
 
-    textFieldEvent: function (textField, type) {
-        switch (type) {
-            default:
-                break;
-        }
+var RegisterScene = cc.Scene.extend({
+    onEnter:function () {
+        this._super();
+        var layer = new RegisterLayer();
+        this.addChild(layer);
     }
 });

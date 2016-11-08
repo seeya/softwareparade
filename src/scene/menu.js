@@ -1,12 +1,9 @@
+//variables to be used by the MenuLayer
 var iconArray = [];
 var startArray = [];
 var scoreArray = [];
 
-var MENU_INITIALIZED = false;
-
 var MenuLayer = cc.Layer.extend({
-    sprite:null,
-    
     ctor:function () {
         //////////////////////////////
         // 1. super init first
@@ -62,72 +59,65 @@ var MenuLayer = cc.Layer.extend({
         for (var i = 0; i < 4; i++){
             section[i] = (innerContainer.width / 4) * (i+1);
         }
+        var that = this;
 
-        //stages
-        //stage1
-        var stage1View = new ccui.ImageView();
-        stage1View.setScale9Enabled(true);
-        stage1View.loadTexture(res.stage_bg);
-        stage1View.setContentSize(cc.size(400, 400));
-        stage1View.x = section[0] / 2;
-        stage1View.y = innerContainer.height/2 + 50;
+        gameManager.getGames(function(response){
+            var games = response;
+            for(var i = 0; i < games.length; i++){
+                var game = games[i];
 
-        var stage1Icon = new ccui.Button();
-        stage1Icon.setScale9Enabled(true);
-        stage1Icon.setTouchEnabled(true);
-        stage1Icon.loadTextures(res.stage1_bg, "", "");
-        stage1Icon.setContentSize(cc.size(400, 400));
-        stage1Icon.x = section[0] / 2;
-        stage1Icon.y = innerContainer.height/2 + 50;
-        stage1Icon.addTouchEventListener(this.touchStageIcon, this);
+                var stageView = new ccui.ImageView();
+                stageView.setScale9Enabled(true);
+                stageView.loadTexture(res.stage_bg);
+                stageView.setContentSize(cc.size(400, 400));
+                stageView.x = section[i] / 2;
+                stageView.y = innerContainer.height/2 + 50;
 
-        iconArray.push(stage1Icon);
+                var stageIcon = new ccui.Button();
+                stageIcon.setScale9Enabled(true);
+                stageIcon.setTouchEnabled(true);
+                stageIcon.loadTextures(res.stage1_bg, "", "");
+                stageIcon.setContentSize(cc.size(400, 400));
+                stageIcon.x = section[i] / 2;
+                stageIcon.y = innerContainer.height/2 + 50;
+                stageIcon.addTouchEventListener(that.touchStageIcon, that);
 
-        var stage1Start = new ccui.Button();
-        stage1Start.setScale9Enabled(true);
-        //stage1Start.setTouchEnabled(true);
-        stage1Start.loadTextures(res.stage_start, "", "");
-        stage1Start.setContentSize(cc.size(100, 100));
-        stage1Start.x = section[0] / 2 - 75;
-        stage1Start.y = innerContainer.height/2 + 50;
-        stage1Start.setOpacity(0);
-        //stage1Start.addTouchEventListener(this.touchBeginStage, this);
+                iconArray.push(stageIcon);
 
-        startArray.push(stage1Start);
+                var stageStart = new ccui.Button();
+                stageStart.setScale9Enabled(true);
+                
+                stageStart.loadTextures(res.stage_start, "", "");
+                stageStart.setContentSize(cc.size(100, 100));
+                stageStart.x = section[0] / 2 - 75;
+                stageStart.y = innerContainer.height/2 + 50;
+                stageStart.setOpacity(0);
 
-        var stage1Score = new ccui.Button();
-        stage1Score.setScale9Enabled(true);
-        stage1Score.setTouchEnabled(true);
-        stage1Score.loadTextures(res.stage_highscore, "", "");
-        stage1Score.setContentSize(cc.size(100, 100));
-        stage1Score.x = section[0] / 2 + 75;
-        stage1Score.y = innerContainer.height/2 + 50;
-        stage1Score.setOpacity(0);
+                startArray.push([stageStart, game]);
 
-        scoreArray.push(stage1Score);
+                var stageScore = new ccui.Button();
+                stageScore.setScale9Enabled(true);
+                stageScore.setTouchEnabled(true);
+                stageScore.loadTextures(res.stage_highscore, "", "");
+                stageScore.setContentSize(cc.size(100, 100));
+                stageScore.x = section[i] / 2 + 75;
+                stageScore.y = innerContainer.height/2 + 50;
+                stageScore.setOpacity(0);
 
-        var stage1Text = new ccui.Text("Whack-a-Requirement", "AmericanTypewriter", 40);
-        stage1Text.setPosition(cc.p(section[0] / 2, innerContainer.height/2 - 200));
+                scoreArray.push([stageScore, game]);
 
-        scrollView.addChild(stage1View);
-        scrollView.addChild(stage1Icon);
-        scrollView.addChild(stage1Start);
-        scrollView.addChild(stage1Score);
-        scrollView.addChild(stage1Text);
+                var stageText = new ccui.Text(game.name, "AmericanTypewriter", 40);
+                stageText.setPosition(cc.p(section[i] / 2, innerContainer.height/2 - 200));
 
-        
-        //add background
-        /*var layout = new ccui.Layout();
-        layout.setContentSize(cc.size(scrollView.getInnerContainerSize().width, scrollView.getInnerContainerSize().height));
-        layout.setBackGroundColorType(ccui.Layout.BG_COLOR_SOLID);
-        layout.setBackGroundColor(cc.color(128, 128, 128));
-        layout.x = 0;
-        layout.y = 0;
+                scrollView.addChild(stageView);
+                scrollView.addChild(stageIcon);
+                scrollView.addChild(stageStart);
+                scrollView.addChild(stageScore);
+                scrollView.addChild(stageText);
+            }
+            
+        });
 
-        scrollView.addChild(layout);*/
-        
-
-        return true;
     },
 
     touchProfile: function(sender, type){
@@ -162,10 +152,11 @@ var MenuLayer = cc.Layer.extend({
                 sender.runAction(fade_out);
                 for (var i = 0; i < iconArray.length; i++){
                     if (sender == iconArray[i]){
-                        startArray[i].setTouchEnabled(true);
-                        startArray[i].addTouchEventListener(this.touchBeginStage, this);
-                        startArray[i].runAction(fade_in_start);
-                        scoreArray[i].runAction(fade_in_score);
+                        startArray[i][0].setTouchEnabled(true);
+                        startArray[i][0].addTouchEventListener(this.touchBeginStage, this);
+                        startArray[i][0].runAction(fade_in_start);
+                        scoreArray[i][0].runAction(fade_in_score);
+                        scoreArray[i][0].addTouchEventListener(this.touchScoreboard, this);
                     }
                 }
                 
@@ -175,21 +166,41 @@ var MenuLayer = cc.Layer.extend({
         }
     },
 
+    /*
+        Touch Event when Player selects a stage
+    */
     touchBeginStage: function(sender, type){
         switch (type) {
             case ccui.Widget.TOUCH_ENDED:
                 //identify which stage is it
-                var stageNo = -1;
                 for(var i = 0 ; i < startArray.length; i++){
-                    if (startArray[0] == sender){
-                        stageNo = i+1;
+                    if (startArray[i][0] == sender){
+                        gameManager.setCurrentGame(startArray[i][1].gameId);
                         break;
                     }
                 }
-                if (stageNo != -1){
-                    startStage(stageNo);
+                if (gameManager.getCurrentGame() != null){
+                    sceneManager.transit("InfoScene");
                 }
-                
+                break;
+            default:
+                break;
+        }
+    },
+
+    touchScoreboard: function(sender, type){
+        switch (type) {
+            case ccui.Widget.TOUCH_ENDED:
+                //identify which stage is it
+                for(var i = 0 ; i < startArray.length; i++){
+                    if (scoreArray[i][0] == sender){
+                        //display popup for highscore
+                        var lbLayer = new LeaderboardLayer(scoreArray[i][1]);
+                        var scene = this.getParent();
+                        scene.addChild(lbLayer);
+                        break;
+                    }
+                }
                 break;
             default:
                 break;
@@ -200,16 +211,6 @@ var MenuLayer = cc.Layer.extend({
 var resetScenes = function(){
     PROFILE_INITIALIZED = false;
     MENU_INITIALIZED = false;
-}
-
-var startStage = function(stageNo){
-    switch(stageNo){
-        case 1:
-            sceneManager.transit("Game1Layer");
-            break;
-        default:
-            break;
-    }
 }
 
 var MenuScene = cc.Scene.extend({

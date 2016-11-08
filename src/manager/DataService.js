@@ -31,16 +31,96 @@ DataService.prototype.register = function(name, facebookId) {
 	});
 };
 
-DataService.prototype.getHighscore = function(gameId) {
+DataService.prototype.getProfile = function(cb) {
+	var that = this;
+	this.post(this.endpoint + 'getProfile', {facebookId: that.user.facebookId/*facebookId*/, sessionToken:that.token/*token*/}, function(response) {
+		cc.log("getProfile: response.name:"+response.name);
+		cc.log("getProfile: response.classroomCode:"+response.classroomCode);
+		cc.log("getProfile: response.classroomName:"+response.classroomName);
 
+		console.log("getProfile success");
+
+		return cb(response);
+		//return that.profile;
+	});
+};//getProfile
+
+DataService.prototype.editPlayerName = function(name,cb) {
+	var that = this;
+	this.post(this.endpoint + 'editPlayerName', {facebookId: that.user.facebookId/*facebookId*/, sessionToken:that.token/*token*/, name:name}, function(response) {
+
+		if(response.name == name || response=="success") {
+			cc.log("editPlayerName: Name Changed to: "+response.name);
+			return cb(response.name);
+		}//if success
+		else {//response=="failure"){
+			console.log("editPlayerName: Name change failure.");
+			return cb(false);
+		}//else failure
+	});//post
+};//editplayername
+
+DataService.prototype.assignPlayerToClassroom = function(classroomCode,cb) {
+	var that = this;
+	this.post(this.endpoint + 'assignPlayerToClassroom', {classroomCode:classroomCode/*'EZUxClsU4R'*/, facebookId: that.user.facebookId/*facebookId*/, sessionToken:that.token/*token*/}, function(response) {
+	if(response.classroomCode == classroomCode) {
+			cc.log("if response.classroomCode == classroomCode : assignPlayerToClassroom: classroom changed to: "+response.classroomName+" "+response.classroomCode);
+			return cb(response);
+		}//if success
+		else {
+			console.log("assignPlayerToClassroom: classroomCode change failure.");
+			return cb(false);
+		}//else failure
+	});//post
+};//assignPlayerToClassroom
+
+DataService.prototype.leaveClassroom = function(classroomCode,cb) {
+	var that = this;
+	this.post(this.endpoint + 'leaveClassroom', {classroomCode:classroomCode/*'EZUxClsU4R'*/, facebookId: that.user.facebookId/*facebookId*/, sessionToken:that.token/*token*/}, function(response) {
+
+		cc.log("leaveClassroom: response:"+response);
+
+		if(response == "success") {
+			cc.log("leaveClassroom: classroom left.");
+			return cb(true);
+		}else if(response=="player not found || not enrolled"){
+			cc.log("leaveClassroom: player not found || not enrolled");
+			return cb(false);
+		}
+		else{
+			cc.log("leaveClassroom: error");
+			return cb(false);
+		}
+
+	});//post
+};//assignPlayerToClassroom
+
+DataService.prototype.createGameAttempt = function(gameId, attempt, cb){
+	var that = this;
+    this.post(this.endpoint + 'createGameAttempt', {facebookId: that.user.facebookId, sessionToken: that.token, gameId: gameId, selectedOptions: attempt}, function(response) {
+		cb(response);
+	});
 };
 
-DataService.prototype.setHighscore = function(score) {
-
+DataService.prototype.getGames = function(cb){
+	var that = this;
+    this.post(this.endpoint + 'getGames', {facebookId: that.user.facebookId, sessionToken: that.token}, function(response) {
+		cb(response);
+	});
 };
 
-DataService.prototype.joinClassroom = function(code) {
+DataService.prototype.getGameQuestions = function(topicId, cb) {
+	var that = this;
+    this.post(this.endpoint + 'getGameQuestions', {facebookId: that.user.facebookId, sessionToken: that.token, topicId: topicId}, function(response) {
+		cb(response);
+	});
+};
 
+DataService.prototype.getTopPlayers = function(gameId, cb){
+	var that = this;
+    this.post(this.endpoint + 'getTopPlayers', {facebookId: that.user.facebookId, sessionToken: that.token, gameId: gameId}, function(response) {
+		cb(response);
+	});
 };
 
 DataService.prototype.setKV = function(key, value) {
@@ -50,9 +130,6 @@ DataService.prototype.setKV = function(key, value) {
 DataService.prototype.getKV = function(key) {
 	return cc.sys.localStorage.getItem(key);
 };
-
-
-// Post a request to an endpoint with a dictionary of parameters
 
 DataService.prototype.post = function(link, params, cb) {
 	this.request(link, params, cb, "POST");
@@ -89,6 +166,7 @@ DataService.prototype.request = function(link, params, cb, method) {
 
     cc.director.getRunningScene().addChild(bg, 100);
     cc.director.getRunningScene().addChild(loading, 101);
+    loading.setTag(TAG_LOADING);
 
 	var xhr = cc.loader.getXMLHttpRequest();
 
@@ -102,8 +180,11 @@ DataService.prototype.request = function(link, params, cb, method) {
 	xhr.open(method, (method == "GET") ? link + str : link);
 	                          
 	xhr.onreadystatechange = function () {
-		cc.director.getRunningScene().removeChild(loading);
-		cc.director.getRunningScene().removeChild(bg);
+		if (cc.director.getRunningScene().getChildByTag(TAG_LOADING) != null){
+			cc.director.getRunningScene().removeChild(loading);
+			cc.director.getRunningScene().removeChild(bg);
+		}
+		
 		loading = null;
 		bg = null;
 

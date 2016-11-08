@@ -8,44 +8,24 @@ Download this repo and paste everything inside.
 
 **Do NOT upload the frameworks and simulator folder.**
 
-## REMOVED Dependency of SDKBox
-SDKBox was not flexible enough and difficult to modify, hence I wrote my own Facebook oauth login and used the Graph API.
+## Scenes & Layers
 
-- The main logic for the oauth process is simply using a `WebView` and parsing the token upon successful login.
-- Next the token is used to fetch the user's facebookId and name.
-- Finally the data is saved locally and can be used if required.
-
-`LoginManager.js` contains the token, facebookId and name of the current user.
-
-`SocialManager.js` uses `loginManger` to share highscores.
-
+Based on the Cocos2d-JS platform architecture, every page that is displayed to the Player is known as a Scene. Every Scene would have one or more Layers stacked on top of one another for rendering of things such as buttons and text.
 
 ## Basic Flow
+
 The application starting point is `welcome.js`. Once loaded, it will initialize a few global variables.
 
-```javascript
-window.ds = new DataService();
+`window.ds = new DataService();
 window.socialManager = new SocialManager();
 window.sceneManager = new SceneManager();
-window.loginManager = new LoginManager();
-```
+window.loginManager = new LoginManager();`
 
 Since all these variables are global, you can just call them directly. Example:
 
-```javascript
-socialManager.shareFacebook("Hi from software parade");
-```
+`socialManager.shareFacebook("Hi from software parade");`
 
-#  GET Request
-```javascript
-ds.get("apiendpoint", {key: value, key, value}, callback);
-```
-
-# POST Request
-```javascript
-ds.post("apiendpoint", {key: value, key, value}, callback);
-```
-The backend server url can get retrieved using `ds.endpoint` which returns `http://spapi.t05.sg/game/` 
+`welcome.js` also loads up the Welcome Scene. From it, the user will transition to the other various Scenes, with each Scene's code located inside other js files inside the scene folder.
 
 ## Explaination of folder structure 
 
@@ -61,11 +41,21 @@ The backend server url can get retrieved using `ds.endpoint` which returns `http
 
 `src/resource.js` - Contains the files (images) name and variable linked to
 
+`src/global.js` - Contains the global variables and functions
+
 `src/welcome.js` - Welcome Scene (Initializes main login screen)
 
 `src/manager` - Manager classes are kept here 
 
 `src/manager/SceneManager.js` - Handles transition and creation of new scenes
+
+`src/manager/GameManager.js` - Handles Game Data retrieval and passing
+
+`src/manager/ProfileManager.js` - Handles Profile display and update
+
+`src/manager/QuestionManager.js` - Handles Question retrieval for varying topics
+
+`src/manager/ScoreManager.js` - Handles attempt logging to be viewed by the Teachers in the web-portal
 
 `src/manager/LoginManager.js` - Handles login to backend and other social networks
 
@@ -77,7 +67,15 @@ The backend server url can get retrieved using `ds.endpoint` which returns `http
 
 `src/scene/menu.js` - Scene displaying all the games available
 
-`src/scene/name.js` - Scene displaying name creation
+`src/scene/game.js` - Scene to display the actual gameplay of the application
+
+`src/scene/pause.js` - Scene displayed when the game is paused.
+
+`src/scene/gameInfo.js` - Scene displaying Game Information before a game is to be started
+
+`src/scene/leaderboard.js` - Contains Leaderboard Layer displaying high scores in the Menu Scene
+
+`src/scene/register.js` - Scene displaying name creation
 
 `src/scene/profile.js` - Scene displaying profile update page
 

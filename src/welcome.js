@@ -1,16 +1,10 @@
-var WELCOME_INITIALIZED = false;
-
 var WelcomeLayer = cc.Layer.extend({
-    sprite:null,
-    _button:null,
     ctor:function () {
         this._super();
-
-
         var size = cc.winSize;
 
         var menuTitle = new cc.MenuItemImage(res.title_png, res.title_png);
-        var menuLogin = new cc.MenuItemImage(res.fb_png, res.fb_active_png, doLogin);
+        var menuLogin = new cc.MenuItemImage(res.fb_png, res.fb_active_png, this.doLogin);
 
         menuTitle.setScale(0.7);
         menuLogin.setScale(1.2);
@@ -21,14 +15,12 @@ var WelcomeLayer = cc.Layer.extend({
         var menu = new cc.Menu(menuTitle, menuLogin);
         menu.alignItemsVerticallyWithPadding(50);
         this.addChild(menu);
-   
-        return true;
+    },
+
+    doLogin: function(){
+        loginManager.loginFacebook();
     }
 });
-
-var doLogin = function() {
-    loginManager.loginFacebook();
-}
 
 var WelcomeScene = cc.Scene.extend({
     onEnter:function () {
@@ -38,6 +30,10 @@ var WelcomeScene = cc.Scene.extend({
             window.socialManager = new SocialManager();
             window.sceneManager = new SceneManager();
             window.loginManager = new LoginManager();
+            window.gameManager = new GameManager();
+            window.questionManager = new QuestionManager();
+            window.scoreManager = new ScoreManager();
+            window.profileManager = new ProfileManager();
 
             WELCOME_INITIALIZED = true;
             var layer = new WelcomeLayer();
@@ -47,3 +43,4 @@ var WelcomeScene = cc.Scene.extend({
         
     }
 });
+

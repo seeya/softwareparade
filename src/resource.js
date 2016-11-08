@@ -22,8 +22,17 @@ var res = {
     stage1_bg: "res/stage1.png",
     stage_start: "res/play-button.png",
     stage_highscore: "res/statistics.png",
+    pause_png: "res/pause.png",
+    game1Sprite_close: "res/hole.png",
+    game1Sprite_open: "res/hole_opened.png",
+    wrong_png: "res/wrong.png",
+    correct_png: "res/correct.png",
     loading_png: "res/loading.png",
-    load_bg: "res/loaderbackground.png"
+    load_bg: "res/loaderbackground.png",
+    facebook_share_png: "res/facebookShare.png",
+    leave_png:"res/leave.png",
+    enter_png:"res/enterClass.png",
+    savename_png:"res/saveName.png"
 
 };
 

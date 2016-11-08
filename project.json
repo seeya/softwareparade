@@ -13,18 +13,27 @@
 
 
     "jsList" : [
+        "src/global.js",
         "src/resource.js",
         "src/manager/DataService.js",
-        "src/manager/SocialManager.js",
         "src/manager/SceneManager.js",
+        "src/manager/SocialManager.js",
         "src/manager/LoginManager.js",
+        "src/manager/GameManager.js",
+        "src/manager/QuestionManager.js",
+        "src/manager/ScoreManager.js",
+        "src/manager/ProfileManager.js",
         "src/welcome.js",
         "src/scene/menu.js",
         "src/scene/name.js",
-        "src/scene/register.js",
         "src/scene/profile.js",
+        "src/scene/leaderboard.js",
+        "src/scene/register.js",
         "src/scene/game.js",
-        "src/scene/gameEnd.js"
+        "src/scene/gameInfo.js",
+        "src/scene/gameEnd.js",
+        "src/scene/pause.js"
+        
         
     ]
 }
